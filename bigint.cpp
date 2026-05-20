@@ -3,7 +3,7 @@
 bigint::bigint() { nbr = '0'; }
 bigint::~bigint() {}
 bigint::bigint(const bigint &ref) { nbr = ref.nbr; }
-bigint::bigint(const uint64_t &start)
+bigint::bigint(uint64_t start)
 {
 	std::string tmp;
 
@@ -24,7 +24,7 @@ bigint::bigint(const std::string &start)
 		tmp += start[i];
 	nbr = tmp;
 }
-bigint::bigint(const char *start)
+bigint::bigint(char const *start)
 {
 	std::size_t i = 0;
 	std::string tmp;
@@ -51,13 +51,13 @@ bigint &bigint::operator=(const std::string &str)
 	return *this;
 }
 
-bigint &bigint::operator=(const char *str)
+bigint &bigint::operator=(char const *str)
 {
 	*this = bigint(str);
 	return *this;
 }
 
-bigint &bigint::operator=(const uint64_t &digit)
+bigint &bigint::operator=(uint64_t digit)
 {
 	*this = bigint(digit);
 	return *this;
@@ -81,7 +81,7 @@ bigint bigint::operator+(const bigint &ref) const
 	return result;
 }
 
-bigint bigint::operator+(const uint64_t &ref) const
+bigint bigint::operator+(uint64_t ref) const
 {
 	bigint a(*this), b(ref);
 	bigint result = a + b;
@@ -97,7 +97,7 @@ bigint bigint::operator+(const std::string &ref) const
 	return result;
 }
 
-bigint bigint::operator+(const char *ref) const
+bigint bigint::operator+(char const *ref) const
 {
 	bigint a(*this), b(ref);
 	bigint result = a + b;
@@ -143,6 +143,30 @@ bigint bigint::operator-(const bigint &ref) const
 	return result;
 }
 
+bigint bigint::operator-(uint64_t ref) const
+{
+	bigint a(*this), b(ref);
+	bigint result = a - b;
+
+	return result;
+}
+
+bigint bigint::operator-(const std::string &ref) const
+{
+	bigint a(*this), b(ref);
+	bigint result = a - b;
+
+	return result;
+}
+
+bigint bigint::operator-(char const *str) const
+{
+	bigint a(*this), b(str);
+	bigint result = a - b;
+
+	return result;
+}
+
 bigint &bigint::operator++()
 {
 	for (std::size_t i = 0; i < nbr.size(); i++)
@@ -171,6 +195,12 @@ bigint bigint::operator--(int)
 {
 	bigint ref(*this);
 
+	--(*this);
+	return ref;
+}
+
+bigint &bigint::operator--()
+{
 	if (nbr.size() == 1 && nbr[0] == '0')
 		throw std::runtime_error("Error: underflow");
 	for (std::size_t i = 0; i < nbr.size(); i++)
@@ -187,7 +217,194 @@ bigint bigint::operator--(int)
 		nbr.pop_back();
 	if (nbr.empty())
 		nbr = '0';
-	return ref;
+	return *this;
+}
+
+bigint bigint::operator>>(const bigint &ref) const
+{
+	bigint		cpy(*this);
+	std::size_t	count;
+
+	if (!ref || (cpy.size() == 1 && cpy.nbr[0] == '0'))
+		return cpy;
+	count = cpy.toSize_t();
+	if (count >= cpy.nbr.size())
+		cpy.nbr = '0';
+	else
+		cpy.nbr.erase(cpy.nbr.begin(), cpy.nbr.begin() + count);
+	return cpy;
+}
+
+bigint bigint::operator>>(uint64_t ref) const
+{
+	bigint n(ref);
+	bigint cpy(*this);
+
+	return cpy << n;
+}
+
+bigint bigint::operator>>(const std::string &ref) const
+{
+	bigint n(ref);
+	bigint cpy(*this);
+
+	return cpy << n;
+}
+
+bigint bigint::operator>>(char const *str) const
+{
+	bigint n(str);
+	bigint cpy(*this);
+
+	return cpy << n;
+}
+
+bigint bigint::operator<<(const bigint &ref) const
+{
+	std::size_t	size;
+	bigint		result(*this);
+
+	if (!ref || (nbr.size() == 1 && nbr[0] == '0'))
+		return *this;
+	size = ref.toSize_t();
+	result.nbr.insert(result.nbr.begin(), size, '0');
+	return result;
+}
+
+bigint bigint::operator<<(uint64_t ref) const
+{
+	bigint a(*this), b(ref);
+
+	return a << b;
+}
+
+bigint bigint::operator<<(const std::string &ref) const
+{
+	bigint a(*this), b(ref);
+
+	return a << b;
+}
+
+bigint bigint::operator<<(char const *str) const
+{
+	bigint a(*this), b(str);
+
+	return a << b;
+}
+
+bigint &bigint::operator<<=(const bigint &ref)
+{
+	*this = *this << ref;
+	return *this;
+}
+
+bigint &bigint::operator<<=(uint64_t ref)
+{
+	*this = *this << bigint(ref);
+	return *this
+}
+
+bigint &bigint::operator<<=(const std::string &ref)
+{
+	*this = *this << bigint(ref);
+	return *this;
+}
+
+bigint &bigint::operator<<=(char const *str)
+{
+	*this = *this << bigint(str);
+	return *this;
+}
+
+bigint &bigint::operator+=(const bigint &ref)
+{
+	*this = *this + ref;
+	return *this;
+}
+
+bigint &bigint::operator+=(uint64_t ref)
+{
+	*this = *this + bigint(ref);
+	return *this;
+}
+
+bigint &bigint::operator+=(char const *str)
+{
+	*this = *this + bigint(str);
+	return *this;
+}
+
+bigint &bigint::operator+=(const std::string &ref)
+{
+	*this = *this + bigint(ref);
+	return *this;
+}
+
+bigint bigint::operator*(const bigint &ref) const
+{
+	bigint		result;
+	bigint		supplent, cpy;
+	uint64_t	digit;
+
+	if (ref.nbr == "0" || nbr == "0")
+		return bigint("0");
+	for (std::size_t i = 0; i < ref.nbr.size(); i++)
+	{
+		digit = ref.nbr[i] - '0';
+		if (!digit) continue;
+		cpy = nbr;
+		supplent = nbr;
+		while (digit--)
+			supplent += cpy;
+		supplent <<= i;
+		result += supplent;
+	}
+	return result;
+}
+
+bigint bigint::operator*(uint64_t ref) const
+{
+	bigint a(*this), b(ref);
+
+	return a * b;
+}
+
+bigint bigint::operator*(char const *str) const
+{
+	bigint a(*this), b(str);
+
+	return a * b;
+}
+
+bigint bigint::operator*(const std::string &ref) const
+{
+	bigint a(*this), b(ref);
+
+	return a * b;
+}
+
+bigint &bigint::operator*=(const bigint &ref)
+{
+	*this = *this * ref;
+	return *this;
+}
+
+bigint &bigint::operator*=(uint64_t ref)
+{
+	*this = *this * bigint(ref);
+	return *this;
+}
+
+bigint &bigint::operator*=(char const *str)
+{
+	*this = *this * bigint(str);
+	return *this;
+}
+
+bigint &bigint::operator*=(const std::string &ref)
+{
+	*this = *this * bigint(ref);
+	return *this;
 }
 
 bool bigint::operator<(const bigint &ref) const
@@ -198,4 +415,45 @@ bool bigint::operator<(const bigint &ref) const
 		if (nbr[i] != ref.nbr[i])
 			return nbr[i] < ref.nbr[i];
 	return nbr[0] < ref.nbr[0];
+}
+
+bool bigint::operator==(const bigint &ref) const { return nbr == ref.nbr; }
+
+bool bigint::operator==(uint64_t ref) const
+{
+	bigint compare(ref);
+
+	return this->nbr == compare.nbr;
+}
+
+bool bigint::operator==(const std::string &ref) const
+{
+	bigint compare(ref);
+
+	return this->nbr == compare.nbr;
+}
+
+bool bigint::operator==(char const *str) const
+{
+	bigint compare(str);
+
+	return this->nbr == compare.nbr;
+}
+
+bool bigint::operator!=(const bigint &ref) const { return !(*this == ref); }
+
+bool bigint::operator!=(uint64_t ref) const { return !(*this == ref); }
+
+bool bigint::operator!=(const std::string &ref) const { return !(*this == ref); }
+
+bool bigint::operator!=(char const *str) const { return !(*this == str); }
+
+std::size_t bigint::toSize_t() const
+{
+	std::size_t	size;
+
+	if (*this > SIZE_MAX)
+		return SIZE_MAX;
+	std::istringstream(nbr) >> size;
+	return size;
 }

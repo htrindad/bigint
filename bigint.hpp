@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <stdint.h>
 #include <stdlib.h>
+#include <limits.h>
 
 class bigint
 {
@@ -16,50 +17,65 @@ class bigint
 		bigint();
 		~bigint();
 		bigint(const bigint &ref);
-		bigint(const uint64_t &start);
+		bigint(uint64_t start);
 		bigint(const std::string &start);
-		bigint(const char *start);
-		bigint	operator+(const bigint &ref);
-		bigint	operator+(const std::string &str);
-		bigint	operator+(const char *str);
-		bigint	operator+(const uint64_t &digit);
-		bigint	operator-(const bigint &ref);
-		bigint	operator-(const std::string &str);
-		bigint	operator-(const char *str);
-		bigint	operator-(const uint64_t &digit);
-		bigint	operator*(const bigint &ref);
-		bigint	operator*(const std::string &str);
-		bigint	operator*(const char *str);
-		bigint	operator*(const uint64_t &digit);
-		bigint	operator/(const bigint &ref);
-		bigint	operator/(const std::string &str);
-		bigint	operator/(const char *str);
-		bigint	operator/(const uint64_t &digit);
-		bigint	operator>>(const std::size_t &times);
-		bigint	operator<<(const std::size_t &times);
-		bool	operator==(const bigint &clone);
-		bool	operator!=(const bigint &clone);
-		bool	operator<(const bigint &clone);
-		bool	operator>(const bigint &clone);
-		bool	operator==(const std::string &clone);
-		bool	operator!=(const std::string &clone);
-		bool	operator<(const std::string &clone);
-		bool	operator>(const std::string &clone);
-		bool	operator==(const uint64_t &clone);
-		bool	operator!=(const uint64_t &clone);
-		bool	operator<(const uint64_t &clone);
-		bool	operator>(const uint64_t &clone);
-		bool	operator==(const char *clone);
-		bool	operator!=(const char *clone);
-		bool	operator<(const char *clone);
-		bool	operator>(const char *clone);
-		bigint	&operator=(const bigint &ref);
-		bigint	&operator=(const std::string &str);
-		bigint	&operator=(const char *str);
-		bigint	&operator=(const uint64_t &digit);
-		bigint	operator--(int n);
-		bigint	operator++(int n);
-		bigint	&operator++();
+		bigint(char const *start);
+		bigint		operator+(const bigint &ref) const;
+		bigint		operator+(const std::string &str) const;
+		bigint		operator+(char const *str) const;
+		bigint		operator+(uint64_t digit) const;
+		bigint		operator-(const bigint &ref) const;
+		bigint		operator-(const std::string &str) const;
+		bigint		operator-(char const *str) const;
+		bigint		operator-(uint64_t digit) const;
+		bigint		operator*(const bigint &ref) const;
+		bigint		operator*(const std::string &str) const;
+		bigint		operator*(char const *str) const;
+		bigint		operator*(uint64_t digit) const;
+		bigint		operator/(const bigint &ref) const;
+		bigint		operator/(const std::string &str) const;
+		bigint		operator/(char const *str) const;
+		bigint		operator/(uint64_t digit) const;
+		bigint		operator>>(const std::size_t &times) const;
+		bigint		operator<<(const std::size_t &times) const;
+		bool		operator==(const bigint &clone) const;
+		bool		operator!=(const bigint &clone) const;
+		bool		operator<(const bigint &clone) const;
+		bool		operator>(const bigint &clone) const;
+		bool		operator==(const std::string &clone) const;
+		bool		operator!=(const std::string &clone) const;
+		bool		operator<(const std::string &clone) const;
+		bool		operator>(const std::string &clone) const;
+		bool		operator==(uint64_t clone) const;
+		bool		operator!=(uint64_t clone) const;
+		bool		operator<(uint64_t clone) const;
+		bool		operator>(uint64_t clone) const;
+		bool		operator==(char const *clone) const;
+		bool		operator!=(char const *clone) const;
+		bool		operator<(char const *clone) const;
+		bool		operator>(char const *clone) const;
+		bigint		&operator=(const bigint &ref);
+		bigint		&operator=(const std::string &str);
+		bigint		&operator=(char const *str);
+		bigint		&operator=(uint64_t digit);
+		bigint		operator--(int n);
+		bigint		operator++(int n);
+		bigint		&operator++();
+		bigint		&operator--();
+		bigint		&operator<<=(const bigint &ref);
+		bigint		&operator<<=(uint64_t ref);
+		bigint		&operator<<=(const std::string &ref);
+		bigint		&operator<<=(char const *str);
+		bigint		&operator+=(const bigint &ref);
+		bigint		&operator+=(uint64_t ref);
+		bigint		&operator+=(char const *str);
+		bigint		&operator+=(const std::string &ref);
+		bigint		&operator*=(const bigint &ref);
+		bigint		&operator*=(uint64_t ref);
+		bigint		&operator*=(char const *str);
+		bigint		&operator*=(const std::string &ref);
+
+		std::size_t	toSize_t();
 };
 
 std::ostream &operator<<(std::ostream &out, const bigint &big);
