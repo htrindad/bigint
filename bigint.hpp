@@ -57,6 +57,9 @@ class bigint
 		bigint	&operator=(const std::string &str);
 		bigint	&operator=(const char *str);
 		bigint	&operator=(const uint64_t &digit);
+		bigint	operator--(int n);
+		bigint	operator++(int n);
+		bigint	&operator++();
 };
 
 std::ostream &operator<<(std::ostream &out, const bigint &big);
