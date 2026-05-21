@@ -74,8 +74,11 @@ class bigint
 		bigint		&operator*=(uint64_t ref);
 		bigint		&operator*=(char const *str);
 		bigint		&operator*=(const std::string &ref);
-
-		std::size_t	toSize_t();
+		bigint		&operator>>=(const bigint &ref) const;
+		bigint		&operator>>=(uint64_t ref) const;
+		bigint		&operator>>=(const std::string &ref) const;
+		bigint		&operator>>=(char const *str) const;
+		std::size_t	toSize_t() const;
 };
 
 std::ostream &operator<<(std::ostream &out, const bigint &big);

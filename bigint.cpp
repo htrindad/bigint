@@ -81,29 +81,11 @@ bigint bigint::operator+(const bigint &ref) const
 	return result;
 }
 
-bigint bigint::operator+(uint64_t ref) const
-{
-	bigint a(*this), b(ref);
-	bigint result = a + b;
+bigint bigint::operator+(uint64_t ref) const { return *this + bigint(ref); }
 
-	return result;
-}
+bigint bigint::operator+(const std::string &ref) const { return *this + bigint(ref); }
 
-bigint bigint::operator+(const std::string &ref) const
-{
-	bigint a(*this), b(ref);
-	bigint result = a + b;
-
-	return result;
-}
-
-bigint bigint::operator+(char const *ref) const
-{
-	bigint a(*this), b(ref);
-	bigint result = a + b;
-
-	return result;
-}
+bigint bigint::operator+(char const *ref) const { return *this + bigint(ref); }
 
 bigint bigint::operator-(const bigint &ref) const
 {
@@ -143,29 +125,11 @@ bigint bigint::operator-(const bigint &ref) const
 	return result;
 }
 
-bigint bigint::operator-(uint64_t ref) const
-{
-	bigint a(*this), b(ref);
-	bigint result = a - b;
+bigint bigint::operator-(uint64_t ref) const { return *this - bigint(ref); }
 
-	return result;
-}
+bigint bigint::operator-(const std::string &ref) const { return *this - bigint(ref); }
 
-bigint bigint::operator-(const std::string &ref) const
-{
-	bigint a(*this), b(ref);
-	bigint result = a - b;
-
-	return result;
-}
-
-bigint bigint::operator-(char const *str) const
-{
-	bigint a(*this), b(str);
-	bigint result = a - b;
-
-	return result;
-}
+bigint bigint::operator-(char const *str) const { return *this - bigint(str); }
 
 bigint &bigint::operator++()
 {
@@ -235,29 +199,11 @@ bigint bigint::operator>>(const bigint &ref) const
 	return cpy;
 }
 
-bigint bigint::operator>>(uint64_t ref) const
-{
-	bigint n(ref);
-	bigint cpy(*this);
+bigint bigint::operator>>(uint64_t ref) const { return *this >> bigint(ref); }
 
-	return cpy << n;
-}
+bigint bigint::operator>>(const std::string &ref) const { return *this >> bigint(ref); }
 
-bigint bigint::operator>>(const std::string &ref) const
-{
-	bigint n(ref);
-	bigint cpy(*this);
-
-	return cpy << n;
-}
-
-bigint bigint::operator>>(char const *str) const
-{
-	bigint n(str);
-	bigint cpy(*this);
-
-	return cpy << n;
-}
+bigint bigint::operator>>(char const *str) const { return *this >> bigint(str); }
 
 bigint bigint::operator<<(const bigint &ref) const
 {
@@ -271,26 +217,11 @@ bigint bigint::operator<<(const bigint &ref) const
 	return result;
 }
 
-bigint bigint::operator<<(uint64_t ref) const
-{
-	bigint a(*this), b(ref);
+bigint bigint::operator<<(uint64_t ref) const { return *this << bigint(ref); }
 
-	return a << b;
-}
+bigint bigint::operator<<(const std::string &ref) const { return *this << bigint(ref); }
 
-bigint bigint::operator<<(const std::string &ref) const
-{
-	bigint a(*this), b(ref);
-
-	return a << b;
-}
-
-bigint bigint::operator<<(char const *str) const
-{
-	bigint a(*this), b(str);
-
-	return a << b;
-}
+bigint bigint::operator<<(char const *str) const { return *this << bigint(str); }
 
 bigint &bigint::operator<<=(const bigint &ref)
 {
@@ -311,6 +242,30 @@ bigint &bigint::operator<<=(const std::string &ref)
 }
 
 bigint &bigint::operator<<=(char const *str)
+{
+	*this = *this << bigint(str);
+	return *this;
+}
+
+bigint &bigint::operator>>=(const bigint &ref)
+{
+	*this = *this << ref;
+	return *this;
+}
+
+bigint &bigint::operator>>=(uint64_t ref)
+{
+	*this = *this << bigint(ref);
+	return *this;
+}
+
+bigint &bigint::operator>>=(const std::string &ref)
+{
+	*this = *this << bigint(ref);
+	return *this;
+}
+
+bigint &bigint::operator>>=(char const *str)
 {
 	*this = *this << bigint(str);
 	return *this;
@@ -362,26 +317,11 @@ bigint bigint::operator*(const bigint &ref) const
 	return result;
 }
 
-bigint bigint::operator*(uint64_t ref) const
-{
-	bigint a(*this), b(ref);
+bigint bigint::operator*(uint64_t ref) const { return *this * bigint(ref); }
 
-	return a * b;
-}
+bigint bigint::operator*(char const *str) const { return *this * bigint(str); }
 
-bigint bigint::operator*(char const *str) const
-{
-	bigint a(*this), b(str);
-
-	return a * b;
-}
-
-bigint bigint::operator*(const std::string &ref) const
-{
-	bigint a(*this), b(ref);
-
-	return a * b;
-}
+bigint bigint::operator*(const std::string &ref) const { return *this * bigint(ref); }
 
 bigint &bigint::operator*=(const bigint &ref)
 {
@@ -407,6 +347,19 @@ bigint &bigint::operator*=(const std::string &ref)
 	return *this;
 }
 
+bigint bigint::operator/(const bigint &ref) const
+{
+	bigint number, divisor;
+
+	if (*this < ref)
+		std::runtime_error("Error: Subtraction would be negative (unsigned)");
+	else
+	{
+		number = *this;
+		divisor = ref;
+	}
+}
+
 bool bigint::operator<(const bigint &ref) const
 {
 	if (nbr.size() != ref.nbr.size())
@@ -417,27 +370,49 @@ bool bigint::operator<(const bigint &ref) const
 	return nbr[0] < ref.nbr[0];
 }
 
+bool bigint::operator<(uint64_t ref) const { return *this < bigint(ref); }
+
+bool bigint::operator<(const std::string &ref) const { return *this < bigint(ref); }
+
+bool bigint::operator<(char const *str) const { return *this < bigint(str); }
+
+bool bigint::operator>(const bigint &ref) const
+{
+	if (nbr.size() != ref.nbr.size())
+		return nbr.size() > ref.nbr.size();
+	for (std::size_t i = nbr.size(); i--;)
+		if (nbr[i] != ref.nbr[i])
+			return nbr[i] > ref.nbr[i];
+	return nbr[0] > ref.nbr[0];
+}
+
+bool bigint::operator>(uint64_t ref) const { return *this > bigint(ref); }
+
+bool bigint::operator>(const std::string &ref) const { return *this > bigint(ref); }
+
+bool bigint::operator>(char const *str) const { return *this > bigint(str); }
+
 bool bigint::operator==(const bigint &ref) const { return nbr == ref.nbr; }
 
 bool bigint::operator==(uint64_t ref) const
 {
 	bigint compare(ref);
 
-	return this->nbr == compare.nbr;
+	return nbr == compare.nbr;
 }
 
 bool bigint::operator==(const std::string &ref) const
 {
 	bigint compare(ref);
 
-	return this->nbr == compare.nbr;
+	return nbr == compare.nbr;
 }
 
 bool bigint::operator==(char const *str) const
 {
 	bigint compare(str);
 
-	return this->nbr == compare.nbr;
+	return nbr == compare.nbr;
 }
 
 bool bigint::operator!=(const bigint &ref) const { return !(*this == ref); }
