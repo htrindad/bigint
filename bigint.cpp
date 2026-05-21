@@ -432,3 +432,11 @@ std::size_t bigint::toSize_t() const
 	std::istringstream(nbr) >> size;
 	return size;
 }
+
+std::string bigint::getNbr() const { return nbr; }
+
+std::ostream	&operator<<(std::ostream &out, const bigint &other)
+{
+	out << other.getNbr();
+	return out;
+}

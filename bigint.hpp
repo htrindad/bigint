@@ -79,6 +79,7 @@ class bigint
 		bigint		&operator>>=(const std::string &ref) const;
 		bigint		&operator>>=(char const *str) const;
 		std::size_t	toSize_t() const;
+		std::string	getNbr() const;
 };
 
 std::ostream &operator<<(std::ostream &out, const bigint &big);
