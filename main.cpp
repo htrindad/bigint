@@ -38,6 +38,7 @@ int main(void)
 
 	// extra
 	bigint x(12345678); bigint y(5);
+	std::cout << x << ' ' << y << std::endl;
 	std::cout << "(x << y) = " << (x << y) << ", x: " << x << ", y: " << y << std::endl;
 	std::cout << "(x >>= y) = " << (x >>= y) << ", x: " << x << ", y: " << y << std::endl;
 	std::cout << "(x >= y) = " << (x >= y) << ", x: " << x << ", y: " << y << std::endl;
